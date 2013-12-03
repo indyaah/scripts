@@ -1,0 +1,6 @@
+#!/bin/sh
+# Cleans multiple maven based projects at once.
+# Takes absolute path to your workspace as $1.
+#
+# i.e. mvn-multi-clean /home/anuj/Workspace/
+find $1 -maxdepth 4 -name "pom.xml" | xargs dirname | while read line; do echo $line && cd $line && mvn clean $line; done
