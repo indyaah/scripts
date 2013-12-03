@@ -1,0 +1,44 @@
+#!/bin/sh
+# Used for cloning a repository locally.
+# Wrote this script because I couldnot maintain lots of cloned examples for spring related (spring guides, spring-hibernate, etc.) projects from github and it got tough to browse.
+# 
+# So this script clones given repo under my Workspace as $HOME/Workspace/USERNAME/REPO_NAME.
+# Very helpful when you have handfull of repos.
+#
+# Takes either SSH or HTTPS URL as argument1 and workspace foldername under $HOME as argument2
+#
+# i.e github-clone https://github.com/indyaah/scripts New_Workspace
+#
+
+URL=$1    # Argument 1 assigned to URL
+DIR="Workspace" # Defualt value for workspace
+
+# Custom Directory
+# If $2 is not null use that value for workspace path
+if [ "$2" ]; then
+    DIR="$2"
+fi
+
+# Simple switch case for checking URL type and then simple cut to get username and repo name.
+case "$URL" in 
+  *https://github.com*)
+    CLONE_TO=$(echo $1 | cut -c20-);;
+  *git@github.com*)
+    CLONE_TO=$(echo $1 | cut -c16- | cut -d "." -f1);;
+   **)
+    echo "Non Github link. Cant clone.";;
+esac 
+
+# Old code
+# if [[ "$URL" == "https" ]]; then
+#    echo "LOLLLLL"
+#    CLONE_TO=$(echo $1 | cut -c20-)
+#  else
+#    CLONE_TO=$(echo $1 | cut -c16- | cut -d "." -f1)
+#   Old RegEx way, too complicated CLONE_TO=$(echo $1 | grep -Po '(?<=(com:)).*(?=.git)')    
+#fi
+
+# Make directory as a precaution as workspace dir may not exist, git clone does create repo directory if it doesnt exist.
+mkdir -p $HOME/$DIR/$CLONE_TO
+echo "Cloning into $HOME/$DIR/$CLONE_TO"
+git clone $URL $HOME/$DIR/$CLONE_TO
