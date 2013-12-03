@@ -1,0 +1,7 @@
+#!/bin/sh
+# Takes absolute path to directory holding multiple Git Repos as argument 1
+# Very useful when you have many repos and you dont want to update one by one.
+# Also it does a git stash before pulling changes so that you dont lose any changes by mistake. Learned from a mistake :P 
+#
+# Usually I use something like this : git-multi-pull /home/anuj/Workspace/
+find $1 -maxdepth 3 -type d -name ".git" | xargs -n 1 dirname | sort | while read line; do echo "Pulling changes for $line" && cd $line && git stash && git pull; done
