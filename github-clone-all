@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# IMPORTANT : Requires ruby.
+# IMPORTANT : Not capable of handling GitHub API V3 pagination, so by default using 200 for per page repos.
+# Can take very long time to clone do not use(read abuse :P ) if you really dont need all the repos.
+# 
+# Copies all the repositories of a GitHub user.
+#
+# Takes username as $1, i.e. : github-clone-all indyaah
+# 
+curl -s "https://api.github.com/users/$1/repos" | ruby -rubygems -e 'require "json"; JSON.load(STDIN.read).each {|repo| %x[custom-clone #{repo["ssh_url"]} ]}'
